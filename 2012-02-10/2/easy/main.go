@@ -31,6 +31,7 @@ func parseInput() (string, string, string) {
 
 var operandPattern = regexp.MustCompile(`(?P<magnitude>\d+)(?P<unit>\w+)`)
 var prefixes = map[string]int{
+	"B":  1,
 	"KB": int(math.Pow(1000, 1)),
 	"MB": int(math.Pow(1000, 2)),
 	"GB": int(math.Pow(1000, 3)),
