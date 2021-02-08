@@ -7,3 +7,9 @@ EXTRA CREDIT: make the calculator have multiple functions! Not only should it be
 ## Demo
 
 I decide to make simple calculator that took in as operands units of prefixes for binary multiples, e.g., 1Ki + 1B, etc.
+
+```zsh
+$ go run .
+16GiB + 0GiB
+17179869184
+```
