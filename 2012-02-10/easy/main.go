@@ -24,5 +24,5 @@ func main() {
 		log.Fatal(err)
 	}
 	user := prompt("What is your username?")
-	fmt.Println(fmt.Sprintf("Your name is %s, you are %s years old, and your username is %s", name, age, user))
+	fmt.Println(fmt.Sprintf("Your name is %s, you are %d years old, and your username is %s", name, age, user))
 }
