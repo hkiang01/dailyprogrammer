@@ -12,4 +12,7 @@ I decide to make simple calculator that took in as operands units of prefixes fo
 $ go run .
 16GiB + 0GiB
 17179869184
+$ go run .
+16B * 1GiB
+17179869184
 ```
