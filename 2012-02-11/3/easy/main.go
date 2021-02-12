@@ -19,14 +19,14 @@ func prompt(prompt string) string {
 
 func encrypt(input string, offset int) {
 	for _, c := range input {
-		fmt.Print(string(int(c) + offset))
+		fmt.Print(string(rune(int(c) + offset)))
 	}
 	fmt.Println()
 }
 
 func decrypt(input string, offset int) {
 	for _, c := range input {
-		fmt.Print(string(int(c) - offset))
+		fmt.Print(string(rune(int(c) - offset)))
 	}
 	fmt.Println()
 }
