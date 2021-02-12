@@ -1,4 +1,4 @@
 # dailyprogrammer
 
-See https://www.reddit.com/r/dailyprogrammer/wiki/challenges#wiki_challenge
+See https://old.reddit.com/r/dailyprogrammer/wiki/challenges#wiki_challenge
 
