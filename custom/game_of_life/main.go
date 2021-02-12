@@ -4,20 +4,19 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"time"
 )
 
-const Length = 5
-const Width = 5
+const length = 10
+const width = 10
 
 type grid struct {
-	cells [Length][Width]bool
+	cells [length][width]bool
 }
 
 func newGrid() grid {
-	cells := [Length][Width]bool{}
-	for i := 0; i < Length; i++ {
-		for j := 0; j < Width; j++ {
+	cells := [length][width]bool{}
+	for i := 0; i < length; i++ {
+		for j := 0; j < width; j++ {
 			if rand.Intn(2) == 0 {
 				cells[i][j] = false
 			} else {
@@ -29,8 +28,8 @@ func newGrid() grid {
 }
 
 func (grid *grid) printGrid() {
-	for i := 0; i < Length; i++ {
-		for j := 0; j < Width; j++ {
+	for i := 0; i < length; i++ {
+		for j := 0; j < width; j++ {
 			if grid.cells[i][j] {
 				fmt.Print("*")
 			} else {
@@ -43,11 +42,21 @@ func (grid *grid) printGrid() {
 
 func (grid *grid) iterate() {
 	newGrid := newGrid()
-	for i := 0; i < Length; i++ {
-		for j := 0; j < Width; j++ {
+	// (i,j) are the coordinates of the old
+	for i := 0; i < length; i++ {
+		for j := 0; j < width; j++ {
 			aliveNeighbors := 0
-			for k := i - 1; k >= 0 && k < Length && k <= i+1; k++ {
-				for l := j - 1; l >= 0 && l < Width && l <= j+1; l++ {
+			// (k,l) are the neighbors of (i,j), within 1 row and 1 col
+			for k := i - 1; k >= 0 && k < length && k <= i+1; k++ {
+				for l := j - 1; l >= 0 && l < width && l <= j+1; l++ {
+					// exclude self
+					if k == i && l == j {
+						continue
+					}
+					// exclude diagonals
+					// if (k == i-1 || k == i+1) && (l == j-1 || l == j+1) {
+					// 	continue
+					// }
 					if grid.cells[k][l] {
 						aliveNeighbors++
 					}
@@ -77,8 +86,18 @@ func (grid *grid) iterate() {
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
-	grid := newGrid()
+	cells := [length][width]bool{
+		{false, false, false, false, false, false, false, false, false, false},
+		{false, false, false, true, true, false, false, false, false, false},
+		{false, false, false, false, true, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false, false},
+		{false, false, false, true, true, false, false, false, false, false},
+		{false, false, true, true, false, false, false, false, false, false},
+		{false, false, false, false, false, true, false, false, false, false},
+		{false, false, false, false, true, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false, false}}
+	grid := grid{cells}
 	fmt.Println("Grid created")
 	grid.printGrid()
 
