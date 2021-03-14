@@ -16,6 +16,8 @@ type cell struct {
 }
 
 var maze [][]string
+var visited [][]bool
+var path []cell
 
 func parse(filePath string) (cell, error) {
 	// get lines of file
@@ -63,6 +65,12 @@ func parse(filePath string) (cell, error) {
 	return startCell, nil
 }
 
+func initializeVisited(nRows int, nCol int) {
+	for i := 0; i < nRows; i++ {
+		visited = append(visited, make([]bool, nCol))
+	}
+}
+
 func getDirection(s string) (cell, error) {
 	switch s {
 	case "h":
@@ -96,23 +104,24 @@ func outOfBounds(c cell) bool {
 	return c.y < 0 || c.x < 0 || c.y >= len(maze) || c.x >= len(maze)
 }
 
-func walk(direction cell, curr cell, depth int) (cell, error) {
+func walk(direction cell, curr cell, depth int) bool {
 	// end condition: are we home?
 	if maze[curr.y][curr.x] == "h" {
-		return curr, nil
+		path = append(path, curr)
+		return true
 	}
+	if visited[curr.y][curr.x] {
+		return false
+	}
+	visited[curr.y][curr.x] = true
 	if depth > 0 {
 		// follow current direction
-		var paths []cell
 		nextFollowingDirection := iterate(curr, direction)
 		if !outOfBounds(nextFollowingDirection) {
-			journey, err := walk(direction, nextFollowingDirection, depth-1)
-			if err != nil {
-				return cell{y: -1, x: -1}, fmt.Errorf("%s out of bounds", nextFollowingDirection)
+			if walk(direction, nextFollowingDirection, depth-1) {
+				path = append(path, curr)
+				return true
 			}
-
-		} else {
-			return cell{y: -1, x: -1}, fmt.Errorf("%s out of bounds", nextFollowingDirection)
 		}
 
 		// follow arrow
@@ -123,33 +132,18 @@ func walk(direction cell, curr cell, depth int) (cell, error) {
 		}
 		nextFollowingArrow := iterate(curr, arrowDirection)
 		if !outOfBounds(nextFollowingArrow) {
-			paths = append(paths, nextFollowingArrow)
-		}
-
-		var validPaths []cell
-		for _, path := range paths {
-			journey := walk()
-		}
-
-		if !outOfBounds(nextFollowingDirection) {
-			pathsFollowingDirection := walk(direction, nextFollowingDirection, depth-1)
-			if pathsFollowingDirection != nil {
-				paths = append(paths, pathsFollowingDirection...)
+			if walk(arrowDirection, nextFollowingArrow, depth-1) {
+				path = append(path, curr)
+				return true
 			}
 		}
-
-		// // follow arrow
-
-		// walk()
-
-		return paths
-	} else {
-		return nil
 	}
+	return false
 }
 
 func main() {
 	start, err := parse("maze.txt")
+	initializeVisited(len(maze), len(maze[0]))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -157,6 +151,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	path := walk(direction, start, 3)
-	fmt.Println(path)
+	routeFound := walk(direction, start, 20)
+	if routeFound {
+		fmt.Println(path)
+	} else {
+		fmt.Println("No route found")
+	}
 }
